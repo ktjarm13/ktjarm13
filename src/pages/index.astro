@@ -1,19 +1,38 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Hexagon from '../components/Hexagon.astro';
+import HexRow from '../components/HexRow.astro';
+import HexGrid from '../components/HexGrid.astro';
 ---
 
-<BaseLayout title="Scaffold check" showChrome={false}>
+<BaseLayout title="Hexagon geometry check" showChrome={false}>
   <div class="mx-auto max-w-5xl px-6 py-16">
-    <h1 class="text-4xl font-extrabold text-charcoal">Scaffold check</h1>
-    <p class="mt-4 text-charcoal">
-      Manrope, cream background, charcoal text.
-    </p>
-    <div class="mt-8 flex gap-3">
-      <span class="h-12 w-12 rounded bg-green"></span>
-      <span class="h-12 w-12 rounded bg-charcoal"></span>
-      <span class="h-12 w-12 rounded bg-orange"></span>
-      <span class="h-12 w-12 rounded bg-yellow"></span>
-      <span class="h-12 w-12 rounded border-2 border-charcoal bg-cream"></span>
+    <h1 class="text-3xl font-extrabold">HexRow</h1>
+    <div class="mt-8">
+      <HexRow>
+        <Hexagon fill="green" label="One" />
+        <Hexagon fill="charcoal" label="Two" href="#" />
+        <Hexagon fill="orange" label="Three" href="#" />
+      </HexRow>
+    </div>
+
+    <h2 class="mt-20 text-3xl font-extrabold">HexGrid (2 / 3 / 2)</h2>
+    <div class="mt-8">
+      <HexGrid>
+        <Fragment slot="rowOne">
+          <Hexagon fill="green" label="R1 A" />
+          <Hexagon fill="charcoal" label="R1 B" />
+        </Fragment>
+        <Fragment slot="rowTwo">
+          <Hexagon fill="orange" label="R2 A" />
+          <Hexagon fill="yellow" label="R2 B" />
+          <Hexagon fill="green" label="R2 C" />
+        </Fragment>
+        <Fragment slot="rowThree">
+          <Hexagon fill="charcoal" label="R3 A" />
+          <Hexagon fill="orange" label="R3 B" />
+        </Fragment>
+      </HexGrid>
     </div>
   </div>
 </BaseLayout>

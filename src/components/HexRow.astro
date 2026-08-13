@@ -1,0 +1,51 @@
+---
+// Home page cluster: three interlocking hexagons.
+//
+// A pointy-top row only nests if alternate hexagons are vertically offset —
+// without that they merely touch at flat edges and read as three separate
+// shapes. Every second hexagon drops by half its height, and neighbours pull
+// in by 25% of their width, which is where the slanted edge begins.
+//
+// Children arrive through a slot, so they carry no scoped-style attribute.
+// The child selectors are :global() to reach them; the .hex-cluster prefix
+// keeps them from leaking to the rest of the page.
+//
+// The offsets use rem, not percentages: a percentage margin resolves against
+// the container's width, not the hexagon's, which collapses the cluster.
+// Hexagons are w-64 (16rem) above sm, so height is width / 0.866 = 18.48rem.
+// Neighbours pull in by a quarter-width (4rem) and the offset hexagon drops by
+// half of height (9.24rem) — the same relationship HexGrid's rows use.
+//
+// The vertical offset uses margin, not transform: Hexagon applies its own
+// transform on hover and focus, and a transform here would be overwritten.
+---
+
+<div class="hex-cluster">
+  <slot />
+</div>
+
+<style>
+  .hex-cluster {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 40rem) {
+    .hex-cluster {
+      flex-direction: row;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 0;
+    }
+
+    :global(.hex-cluster > * + *) {
+      margin-left: -4rem;
+    }
+
+    :global(.hex-cluster > *:nth-child(even)) {
+      margin-top: 9.24rem;
+    }
+  }
+</style>

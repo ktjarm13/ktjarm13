@@ -1,0 +1,48 @@
+---
+interface Props {
+  fill?: 'green' | 'charcoal' | 'orange' | 'yellow';
+  href?: string;
+  label?: string;
+  size?: 'md' | 'lg';
+}
+
+const { fill = 'green', href, label, size = 'md' } = Astro.props;
+
+const fillClass = {
+  green: 'bg-green text-white',
+  charcoal: 'bg-charcoal text-white',
+  orange: 'bg-orange text-white',
+  // Yellow is light; white text on it fails contrast, so use charcoal.
+  yellow: 'bg-yellow text-charcoal',
+}[fill];
+
+const sizeClass = size === 'lg' ? 'w-72 sm:w-80' : 'w-56 sm:w-64';
+const Tag = href ? 'a' : 'div';
+/** Slot content wins when present; `label` is the simple single-string case. */
+const hasSlot = Astro.slots.has('default');
+---
+
+<Tag
+  class:list={[
+    'hexagon group relative grid place-items-center text-center no-underline',
+    'transition-transform duration-200',
+    sizeClass,
+    fillClass,
+    href && 'hover:scale-[1.03] focus-visible:scale-[1.03]',
+    href &&
+      'focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-charcoal',
+  ]}
+  {...href ? { href } : {}}
+>
+  <span class="block px-8 py-6 text-base font-extrabold leading-tight sm:text-lg">
+    {hasSlot ? <slot /> : label}
+  </span>
+</Tag>
+
+<style>
+  .hexagon {
+    /* Pointy-top hexagon. 0.8660 = cos(30deg), giving true regular geometry. */
+    aspect-ratio: 0.866 / 1;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  }
+</style>
