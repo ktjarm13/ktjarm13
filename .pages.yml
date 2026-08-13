@@ -1,0 +1,211 @@
+# Pages CMS configuration.
+#
+# IMPORTANT: this file and src/schemas/pages.ts are a matched pair. Every field
+# here must exist in the matching Zod schema with the same name, and vice versa.
+# Run `npm run check:cms` after changing either one.
+
+media:
+  input: public/media
+  output: /media
+  extensions: [png, jpg, jpeg, webp, svg]
+  rename: safe
+
+content:
+  - name: home
+    label: Home page
+    type: file
+    path: src/data/home.json
+    format: json
+    fields:
+      - name: title
+        label: Your name and job title
+        type: string
+        description: Shown in the first hexagon and as the browser tab title.
+      - name: campaignsHexLabel
+        label: Second hexagon wording
+        type: string
+        description: The hexagon that links to your Campaigns History page.
+      - name: conceptsHexLabel
+        label: Third hexagon wording
+        type: string
+        description: The hexagon that links to your Feeding Liverpool concepts page.
+
+  - name: campaigns-history
+    label: Campaigns History page
+    type: file
+    path: src/data/campaigns-history.json
+    format: json
+    fields:
+      - name: title
+        label: Page heading
+        type: string
+      - name: sections
+        label: Campaign sections
+        type: object
+        list:
+          min: 3
+          max: 3
+        description: Exactly three sections. The layout alternates image sides automatically.
+        fields:
+          - name: heading
+            label: Section heading
+            type: string
+          - name: body
+            label: Section text
+            type: rich-text
+            options:
+              format: html
+          - name: image
+            label: Section image
+            type: image
+            description: Leave empty to show a placeholder box.
+
+  - name: concepts
+    label: Feeding Liverpool Concepts page
+    type: file
+    path: src/data/concepts.json
+    format: json
+    fields:
+      - name: title
+        label: Page heading
+        type: string
+      - name: subtitle
+        label: Page subheading
+        type: string
+      - name: sectionOne
+        label: 'Concept one: Good Food Stories'
+        type: object
+        fields:
+          - name: heading
+            label: Concept heading
+            type: string
+          - name: body
+            label: Concept text
+            type: rich-text
+            options:
+              format: html
+            description: The 'Menu cards' link in this text points to your Recipes page.
+          - name: image
+            label: Concept image
+            type: image
+      - name: sectionTwo
+        label: 'Concept two: Food Rights in Action'
+        type: object
+        fields:
+          - name: heading
+            label: Concept heading
+            type: string
+          - name: body
+            label: Concept text
+            type: rich-text
+            options:
+              format: html
+          - name: image
+            label: First image
+            type: image
+          - name: imageTwo
+            label: Second image
+            type: image
+      - name: sectionThree
+        label: 'Concept three: Mapping & Evidencing'
+        type: object
+        fields:
+          - name: heading
+            label: Concept heading
+            type: string
+          - name: body
+            label: Concept text
+            type: rich-text
+            options:
+              format: html
+          - name: mapScreenshot
+            label: Map screenshot
+            type: image
+            description: A screenshot of the Feeding Liverpool community food spaces map. Visitors select it to open your Impact page.
+
+  - name: recipes
+    label: Recipes page
+    type: file
+    path: src/data/recipes.json
+    format: json
+    fields:
+      - name: title
+        label: Page heading
+        type: string
+      - name: section
+        label: Recipe content
+        type: object
+        fields:
+          - name: heading
+            label: Section heading
+            type: string
+          - name: body
+            label: Section text
+            type: rich-text
+            options:
+              format: html
+          - name: image
+            label: Section image
+            type: image
+
+  - name: impact
+    label: Community Food Spaces Impact page
+    type: file
+    path: src/data/impact.json
+    format: json
+    fields:
+      - name: title
+        label: Page heading
+        type: string
+      - name: pantryScreenshot
+        label: Food space page screenshot
+        type: image
+        description: A screenshot of a community food space listing, shown at the top of the page.
+      - name: rowOne
+        label: Top row figures
+        type: object
+        list:
+          min: 2
+          max: 2
+        description: Exactly two hexagons.
+        fields:
+          - name: value
+            label: Figure
+            type: string
+            description: Type anything you like, for example 1,240 or "Coming soon".
+          - name: label
+            label: What the figure means
+            type: string
+      - name: rowTwo
+        label: Middle row spotlights
+        type: object
+        list:
+          min: 3
+          max: 3
+        description: Exactly three hexagons.
+        fields:
+          - name: role
+            label: Spotlight type
+            type: string
+            description: For example 'Organiser Spotlight'.
+          - name: name
+            label: Person's name
+            type: string
+          - name: photo
+            label: Photo
+            type: image
+            description: Stored for later use. Not currently shown on the page.
+      - name: rowThree
+        label: Bottom row figures
+        type: object
+        list:
+          min: 2
+          max: 2
+        description: Exactly two hexagons.
+        fields:
+          - name: value
+            label: Figure
+            type: string
+          - name: label
+            label: What the figure means
+            type: string

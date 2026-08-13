@@ -18,5 +18,8 @@
     "astro": "^7.2.1",
     "tailwindcss": "^4.3.3",
     "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "yaml": "^2.9.0"
   }
 }
