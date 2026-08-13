@@ -1,0 +1,33 @@
+---
+import '../styles/global.css';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { withBase } from '../lib/paths';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** Home hides the header/footer chrome; every other page shows it. */
+  showChrome?: boolean;
+}
+
+const { title, description, showChrome = true } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    <link rel="icon" href={withBase('favicon.svg')} />
+  </head>
+  <body class="min-h-screen flex flex-col">
+    {showChrome && <SiteHeader />}
+    <main class="flex-1">
+      <slot />
+    </main>
+    {showChrome && <SiteFooter />}
+  </body>
+</html>

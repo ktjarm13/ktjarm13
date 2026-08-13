@@ -16,3 +16,5 @@ Thumbs.db
 # Remember plugin working files
 .remember/logs/
 .remember/tmp/
+.playwright-mcp/
+*.png
