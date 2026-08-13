@@ -1,0 +1,18 @@
+# Dependencies
+node_modules/
+
+# Astro build output
+dist/
+.astro/
+
+# Environment
+.env
+.env.production
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+
+# Remember plugin working files
+.remember/logs/
+.remember/tmp/
