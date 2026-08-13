@@ -11,6 +11,21 @@ media:
   rename: safe
 
 content:
+  - name: site
+    label: Site header
+    type: file
+    path: src/data/site.json
+    format: json
+    fields:
+      - name: wordmark
+        label: Header logo
+        type: image
+        description: Your name graphic, shown at the top of every page except Home. Selecting it returns visitors to the Home page. Leave empty to show your name as text instead.
+      - name: siteName
+        label: Your name
+        type: string
+        description: Used for screen readers describing the logo, and shown as text if no logo is set.
+
   - name: home
     label: Home page
     type: file

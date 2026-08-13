@@ -24,6 +24,17 @@ export const spotlightHexSchema = z.object({
   photo: imagePath,
 });
 
+/**
+ * Site-wide settings shared by every page, rather than duplicated per page.
+ * Currently just the header wordmark.
+ */
+export const siteSchema = z.object({
+  /** Wordmark image shown in the header. Falls back to text when empty. */
+  wordmark: imagePath,
+  /** Used as the wordmark's alt text and the text fallback. */
+  siteName: z.string().min(1),
+});
+
 export const homeSchema = z.object({
   title: z.string().min(1),
   campaignsHexLabel: z.string().min(1),
@@ -72,6 +83,7 @@ export const impactSchema = z.object({
 export type Section = z.infer<typeof sectionSchema>;
 export type StatHex = z.infer<typeof statHexSchema>;
 export type SpotlightHex = z.infer<typeof spotlightHexSchema>;
+export type Site = z.infer<typeof siteSchema>;
 export type Home = z.infer<typeof homeSchema>;
 export type CampaignsHistory = z.infer<typeof campaignsHistorySchema>;
 export type Concepts = z.infer<typeof conceptsSchema>;

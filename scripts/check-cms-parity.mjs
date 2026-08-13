@@ -6,9 +6,11 @@ import {
   homeSchema,
   impactSchema,
   recipesSchema,
+  siteSchema,
 } from '../src/schemas/pages.ts';
 
 const schemas = {
+  site: siteSchema,
   home: homeSchema,
   'campaigns-history': campaignsHistorySchema,
   concepts: conceptsSchema,

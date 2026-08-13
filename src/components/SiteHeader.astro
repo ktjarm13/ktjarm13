@@ -2,15 +2,37 @@
 // Not in the original notes. Without it, /impact and /recipes are dead ends,
 // since they are only reachable by walking through /concepts.
 import { withBase } from '../lib/paths';
+
+interface Props {
+  /** Wordmark image path from the CMS. Falls back to text when empty. */
+  wordmark?: string | null;
+  /** Used as the wordmark's alt text, and shown when no image is set. */
+  siteName?: string;
+}
+
+const { wordmark = null, siteName = 'Katie Jarman' } = Astro.props;
 ---
 
 <header class="border-b-4 border-green/20 bg-mint">
-  <div class="mx-auto max-w-5xl px-6 py-8">
+  <div class="mx-auto max-w-5xl px-6 py-6">
     <a
       href={withBase('/')}
-      class="font-display text-2xl text-charcoal no-underline hover:text-green"
+      class="inline-block rounded focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-green"
+      aria-label={`${siteName} — home`}
     >
-      Katie Jarman
+      {
+        wordmark ? (
+          <img
+            src={withBase(wordmark)}
+            alt={siteName}
+            width={362}
+            height={182}
+            class="h-16 w-auto sm:h-20"
+          />
+        ) : (
+          <span class="font-display text-2xl text-charcoal">{siteName}</span>
+        )
+      }
     </a>
   </div>
 </header>
