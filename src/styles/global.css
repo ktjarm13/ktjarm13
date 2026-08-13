@@ -1,0 +1,39 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+
+@import '@fontsource-variable/manrope/index.css';
+
+@theme {
+  --color-green: #049013;
+  --color-charcoal: #1d2a24;
+  --color-orange: #f26722;
+  --color-yellow: #fea000;
+  --color-cream: #faf8f5;
+
+  --font-sans: 'Manrope Variable', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Body copy is charcoal on cream (~13:1). Green (~4.3:1) and orange (~2.9:1)
+   are below WCAG AA on cream and must never be used for body or small text. */
+body {
+  background-color: var(--color-cream);
+  color: var(--color-charcoal);
+  font-family: var(--font-sans);
+}
+
+/* Rich-text bodies from the CMS render through .prose. Force charcoal text and
+   green links, overriding Tailwind Typography's default greys. */
+.prose {
+  --tw-prose-body: var(--color-charcoal);
+  --tw-prose-headings: var(--color-charcoal);
+  --tw-prose-bold: var(--color-charcoal);
+  --tw-prose-counters: var(--color-charcoal);
+  --tw-prose-bullets: var(--color-green);
+  --tw-prose-links: var(--color-green);
+}
+
+/* Links get underlines so colour is never the sole affordance. */
+.prose :where(a):not(:where(.not-prose *)) {
+  text-decoration-thickness: 2px;
+  text-underline-offset: 2px;
+}

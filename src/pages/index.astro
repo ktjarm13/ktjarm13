@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hexagon from '../components/Hexagon.astro';
+import HexRow from '../components/HexRow.astro';
+import { homeSchema, parsePage } from '../schemas/pages';
+import { withBase } from '../lib/paths';
+import raw from '../data/home.json';
+
+const data = parsePage(homeSchema, raw, 'home');
+---
+
+<BaseLayout title={data.title} showChrome={false}>
+  <div class="mx-auto grid min-h-screen max-w-5xl place-items-center px-6 py-16">
+    <div class="w-full">
+      <h1 class="sr-only">{data.title}</h1>
+      <HexRow size="lg">
+        <Hexagon fill="charcoal" size="lg">{data.title}</Hexagon>
+        <Hexagon fill="green" size="lg" href={withBase('/campaigns-history')}>
+          {data.campaignsHexLabel}
+        </Hexagon>
+        <Hexagon fill="orange" size="lg" href={withBase('/concepts')}>
+          {data.conceptsHexLabel}
+        </Hexagon>
+      </HexRow>
+    </div>
+  </div>
+</BaseLayout>

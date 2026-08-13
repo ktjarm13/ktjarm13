@@ -1,0 +1,16 @@
+---
+// Not in the original notes. Without it, /impact and /recipes are dead ends,
+// since they are only reachable by walking through /concepts.
+import { withBase } from '../lib/paths';
+---
+
+<header class="border-b-2 border-charcoal/10">
+  <div class="mx-auto max-w-5xl px-6 py-5">
+    <a
+      href={withBase('/')}
+      class="text-lg font-extrabold text-charcoal no-underline hover:text-green"
+    >
+      Katie Jarman
+    </a>
+  </div>
+</header>

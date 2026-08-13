@@ -1,0 +1,64 @@
+---
+// Impact page honeycomb: rows of 2, 3, 2.
+//
+// True honeycomb geometry: hexagons within a row sit edge to edge and do NOT
+// overlap — only successive rows interlock, pulled up by a quarter of hexagon
+// height so each row nests into the notches of the one above. Overlapping
+// within a row would clip neighbours' text under adjacent fills.
+//
+// The 2/3/2 shape centres itself: flex centring handles the half-hexagon
+// offset between a 2-wide and 3-wide row automatically.
+//
+// Offsets are computed from --hex-w. A percentage margin would resolve against
+// the container rather than the hexagon and collapse the rows.
+---
+
+<div class="hex-honeycomb">
+  <div class="hex-row">
+    <slot name="rowOne" />
+  </div>
+  <div class="hex-row hex-row-nested">
+    <slot name="rowTwo" />
+  </div>
+  <div class="hex-row hex-row-nested">
+    <slot name="rowThree" />
+  </div>
+</div>
+
+<style>
+  .hex-honeycomb {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .hex-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 40rem) {
+    .hex-honeycomb {
+      /* Hexagon width above sm (w-64), and its pointy-top height. */
+      --hex-w: 16rem;
+      --hex-h: calc(var(--hex-w) / 0.866);
+
+      gap: 0;
+    }
+
+    .hex-row {
+      flex-direction: row;
+      justify-content: center;
+      gap: 0;
+    }
+
+    /* Rows overlap vertically by a quarter of hexagon height, where a
+       pointy-top hexagon's upper slope meets its straight side. */
+    .hex-row-nested {
+      margin-top: calc(var(--hex-h) / -4);
+    }
+  }
+</style>

@@ -1,0 +1,89 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ImageOrPlaceholder from '../components/ImageOrPlaceholder.astro';
+import Hexagon from '../components/Hexagon.astro';
+import HexGrid from '../components/HexGrid.astro';
+import { impactSchema, parsePage } from '../schemas/pages';
+import raw from '../data/impact.json';
+
+const data = parsePage(impactSchema, raw, 'impact');
+
+/** Deterministic rotation so the honeycomb reads as a designed cluster and
+ *  stays stable between builds. */
+const fills = ['green', 'charcoal', 'orange', 'yellow'] as const;
+type Fill = (typeof fills)[number];
+const fillAt = (index: number): Fill => fills[index % fills.length]!;
+---
+
+<BaseLayout title={data.title}>
+  <div class="mx-auto max-w-5xl px-6 py-12">
+    <h1 class="text-3xl font-extrabold text-charcoal sm:text-4xl">
+      {data.title}
+    </h1>
+
+    <section class="mt-8">
+      <h2 class="sr-only">Community food space detail</h2>
+      <ImageOrPlaceholder
+        src={data.pantryScreenshot}
+        alt="Christ Church Toxteth Park Pantry listing"
+        label="Christ Church Toxteth Park Pantry page screenshot"
+        width={1200}
+        height={900}
+      />
+    </section>
+
+    <section class="mt-16 border-t-2 border-charcoal/10 pt-12">
+      <h2 class="text-2xl font-extrabold text-charcoal sm:text-3xl">
+        Collective impact
+      </h2>
+      <div class="mt-10">
+        <HexGrid>
+          <Fragment slot="rowOne">
+            {
+              data.rowOne.map((hex, index) => (
+                <Hexagon fill={fillAt(index)}>
+                  <span class="block text-xl font-extrabold sm:text-2xl">
+                    {hex.value}
+                  </span>
+                  <span class="mt-1 block text-[0.65rem] font-semibold leading-snug sm:text-xs">
+                    {hex.label}
+                  </span>
+                </Hexagon>
+              ))
+            }
+          </Fragment>
+
+          <Fragment slot="rowTwo">
+            {
+              data.rowTwo.map((hex, index) => (
+                <Hexagon fill={fillAt(index + 2)}>
+                  <span class="block text-[0.65rem] font-semibold uppercase tracking-wide sm:text-xs">
+                    {hex.role}
+                  </span>
+                  <span class="mt-1 block text-base font-extrabold sm:text-lg">
+                    {hex.name}
+                  </span>
+                </Hexagon>
+              ))
+            }
+          </Fragment>
+
+          <Fragment slot="rowThree">
+            {
+              data.rowThree.map((hex, index) => (
+                <Hexagon fill={fillAt(index + 5)}>
+                  <span class="block text-xl font-extrabold sm:text-2xl">
+                    {hex.value}
+                  </span>
+                  <span class="mt-1 block text-[0.65rem] font-semibold leading-snug sm:text-xs">
+                    {hex.label}
+                  </span>
+                </Hexagon>
+              ))
+            }
+          </Fragment>
+        </HexGrid>
+      </div>
+    </section>
+  </div>
+</BaseLayout>

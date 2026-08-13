@@ -1,0 +1,23 @@
+{
+  "title": "Community Food Spaces Impact",
+  "pantryScreenshot": null,
+  "rowOne": [
+    { "value": "000", "label": "Amount of people served this month" },
+    { "value": "000", "label": "Number of volunteers this month" }
+  ],
+  "rowTwo": [
+    { "role": "Organiser Spotlight", "name": "Name to follow", "photo": null },
+    { "role": "Shopper Highlight", "name": "Name to follow", "photo": null },
+    { "role": "Volunteer Highlight", "name": "Name to follow", "photo": null }
+  ],
+  "rowThree": [
+    {
+      "value": "— tonnes",
+      "label": "Weight of food saved from landfill this month"
+    },
+    {
+      "value": "— tonnes",
+      "label": "Weight of locally produced food this month"
+    }
+  ]
+}

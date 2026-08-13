@@ -1,0 +1,64 @@
+---
+// Home page cluster: three interlocking hexagons.
+//
+// A pointy-top row only nests if alternate hexagons are vertically offset —
+// without that they merely touch at flat edges and read as three separate
+// shapes. Every second hexagon drops by half its height, and neighbours pull
+// in by a quarter of their width, where the slanted edge begins.
+//
+// Children arrive through a slot, so they carry no scoped-style attribute.
+// The child selectors are :global() to reach them; the .hex-cluster prefix
+// keeps them from leaking to the rest of the page.
+//
+// Offsets are computed from --hex-w rather than hard-coded, so the cluster
+// nests correctly at both Hexagon sizes (w-56/w-64 and the lg w-72/w-80).
+// A percentage margin would resolve against the container, not the hexagon,
+// and collapse the cluster. The vertical offset uses margin, not transform,
+// because Hexagon applies its own transform on hover and focus.
+
+interface Props {
+  /** Must match the Hexagon `size` used inside, so offsets line up. */
+  size?: 'md' | 'lg';
+}
+
+const { size = 'md' } = Astro.props;
+---
+
+<div class="hex-cluster" data-size={size}>
+  <slot />
+</div>
+
+<style>
+  .hex-cluster {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 40rem) {
+    .hex-cluster {
+      /* Hexagon width at each size, above the sm breakpoint. */
+      --hex-w: 16rem; /* w-64 */
+      /* Pointy-top height: width / cos(30deg). */
+      --hex-h: calc(var(--hex-w) / 0.866);
+
+      flex-direction: row;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 0;
+    }
+
+    .hex-cluster[data-size='lg'] {
+      --hex-w: 20rem; /* w-80 */
+    }
+
+    :global(.hex-cluster > * + *) {
+      margin-left: calc(var(--hex-w) / -4);
+    }
+
+    :global(.hex-cluster > *:nth-child(even)) {
+      margin-top: calc(var(--hex-h) / 2);
+    }
+  }
+</style>

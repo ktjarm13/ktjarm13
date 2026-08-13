@@ -1,0 +1,21 @@
+---
+interface Props {
+  label: string;
+  width?: number;
+  height?: number;
+}
+
+const { label, width = 800, height = 600 } = Astro.props;
+---
+
+<div
+  class="grid place-items-center rounded-xl border-2 border-dashed border-charcoal/30 bg-charcoal/5 p-6 text-center"
+  style={`aspect-ratio: ${width} / ${height};`}
+>
+  <div>
+    <p class="text-sm font-bold text-charcoal">{label}</p>
+    <p class="mt-1 text-xs text-charcoal/70">
+      Image placeholder &middot; {width} &times; {height}
+    </p>
+  </div>
+</div>
