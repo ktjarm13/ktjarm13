@@ -34,7 +34,7 @@ const hasSlot = Astro.slots.has('default');
   ]}
   {...href ? { href } : {}}
 >
-  <span class="block px-8 py-6 text-base font-extrabold leading-tight sm:text-lg">
+  <span class="hexagon-body text-sm font-extrabold leading-tight sm:text-base">
     {hasSlot ? <slot /> : label}
   </span>
 </Tag>
@@ -44,5 +44,17 @@ const hasSlot = Astro.slots.has('default');
     /* Pointy-top hexagon. 0.8660 = cos(30deg), giving true regular geometry. */
     aspect-ratio: 0.866 / 1;
     clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  }
+
+  /* A hexagon's usable area narrows toward its top and bottom points, so
+     rectangular padding is not enough — text would cross the clipped edge.
+     Capping the text column at 62% of hexagon width keeps every line inside
+     the straight sides. Set on the element itself rather than via a Tailwind
+     utility so it is not overridden by the display utility's specificity. */
+  .hexagon-body {
+    display: block;
+    max-width: 62%;
+    overflow-wrap: break-word;
+    hyphens: auto;
   }
 </style>

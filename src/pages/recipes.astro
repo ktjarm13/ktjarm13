@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import ImageOrPlaceholder from '../components/ImageOrPlaceholder.astro';
+import { recipesSchema, parsePage } from '../schemas/pages';
+import raw from '../data/recipes.json';
+
+const data = parsePage(recipesSchema, raw, 'recipes');
+---
+
+<BaseLayout title={data.title}>
+  <div class="mx-auto max-w-5xl px-6 py-12">
+    <h1 class="text-3xl font-extrabold text-charcoal sm:text-4xl">
+      {data.title}
+    </h1>
+
+    <Section heading={data.section.heading} body={data.section.body}>
+      <ImageOrPlaceholder
+        slot="media"
+        src={data.section.image}
+        alt={data.section.heading}
+        label="Menu card image"
+      />
+    </Section>
+  </div>
+</BaseLayout>
