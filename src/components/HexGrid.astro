@@ -1,31 +1,37 @@
 ---
-// Impact page honeycomb: rows of 2, 3, 2.
+// Local Food Space honeycomb: 7 hexagons as columns of 2, 3, 2.
 //
-// Flat-top hexagons, so rows tessellate differently from pointy-top ones:
-// each row sits directly below the last with a small gap, and the wider
-// middle row is centred by flex, giving the staggered honeycomb look.
+// Flat-top hexagons (points left and right) tessellate in COLUMNS, not rows.
+// With width W and height H = W * cos(30deg) = W * 0.866:
 //
-// Per Katie's wireframe hexagons TOUCH but never overlap, so there are no
-// negative margins here — gaps are positive and small.
+//   - Columns sit 0.75W apart, so they overlap horizontally by a quarter width
+//     and each hexagon's left point tucks into its neighbour's notch.
+//   - Within a column, hexagons stack edge to edge: spacing exactly H, no gap.
+//   - Adjacent columns are offset vertically by H/2, so a 2-hex column sits
+//     exactly in the gaps of a 3-hex column.
 //
-// Row children arrive through slots and carry no scoped-style attribute, so
-// child selectors would need :global(). None are needed now that spacing is
-// handled by gap on the row itself.
+// A row-based 2/3/2 cannot tessellate flat-top hexagons: centring a 3-wide row
+// against a 2-wide row offsets it by W/2, but nesting needs 0.75W. Columns are
+// the arrangement that actually fits, and it matches Katie's wireframes.
+//
+// Slot children carry no scoped-style attribute, so child selectors are
+// :global(), prefixed with .hex-col so they do not leak.
 ---
 
 <div class="hex-honeycomb">
-  <div class="hex-row">
+  <div class="hex-col hex-col-outer">
     <slot name="rowOne" />
   </div>
-  <div class="hex-row">
+  <div class="hex-col hex-col-centre">
     <slot name="rowTwo" />
   </div>
-  <div class="hex-row">
+  <div class="hex-col hex-col-outer">
     <slot name="rowThree" />
   </div>
 </div>
 
 <style>
+  /* Below sm the honeycomb collapses to one plain vertical column. */
   .hex-honeycomb {
     display: flex;
     flex-direction: column;
@@ -33,7 +39,7 @@
     gap: 1.5rem;
   }
 
-  .hex-row {
+  .hex-col {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -42,52 +48,24 @@
 
   @media (min-width: 40rem) {
     .hex-honeycomb {
-      /* Hexagon width above sm (w-64), and its flat-top height. */
+      /* Hexagon width above sm (w-64) and its flat-top height. */
       --hex-w: 16rem;
       --hex-h: calc(var(--hex-w) * 0.866);
 
-      gap: 0;
-    }
-
-    .hex-row {
       flex-direction: row;
+      align-items: center;
       justify-content: center;
       gap: 0;
     }
 
-    /* Flat-top hexagons tessellate at 3/4 width horizontally. Pulling
-       neighbours in by a quarter-width, less a hairline, puts the diagonal
-       edges against each other without the fills overlapping. */
-    :global(.hex-row > * + *) {
-      margin-left: calc(var(--hex-w) / -4 + 0.25rem);
+    .hex-col {
+      /* Edge to edge within a column: no gap, no overlap. */
+      gap: 0;
     }
 
-    /* Flat-top rows stack at full height — unlike pointy-top ones they do not
-       interlock vertically. The horizontal half-width offset between a 2-wide
-       and 3-wide row, which flex centring produces for free, is what gives the
-       honeycomb its staggered look. A hairline gap keeps fills apart. */
-    .hex-row + .hex-row {
-      margin-top: 0.25rem;
+    /* Columns overlap horizontally by a quarter width. */
+    :global(.hex-honeycomb > * + *) {
+      margin-left: calc(var(--hex-w) / -4);
     }
-  }
-
-  /* The negative horizontal margin makes later hexagons paint over earlier
-     ones. Their clipped corners are transparent so no fill is hidden, but a
-     neighbour's corner can still land on top of a label. Reversing the paint
-     order per row keeps each hexagon's own text above its neighbours. */
-  :global(.hex-row > *) {
-    position: relative;
-  }
-
-  :global(.hex-row > *:nth-child(1)) {
-    z-index: 3;
-  }
-
-  :global(.hex-row > *:nth-child(2)) {
-    z-index: 2;
-  }
-
-  :global(.hex-row > *:nth-child(3)) {
-    z-index: 1;
   }
 </style>

@@ -1,20 +1,20 @@
 ---
-// Home page cluster: three hexagons in a staggered row.
+// Home page cluster: three flat-top hexagons that fit together.
 //
-// Per Katie's wireframe the hexagons TOUCH but never overlap: neighbours sit
-// edge to edge with a small gap, and the middle one is raised so the cluster
-// reads as a honeycomb fragment rather than a straight line.
+// Flat-top geometry, width W, height H = W * 0.866: a neighbour nests into the
+// notch when it sits 0.75W across and H/2 up or down. So the row overlaps
+// horizontally by a quarter width and the middle hexagon is raised by half a
+// height — the same relationship HexGrid uses between rows.
 //
-// Children arrive through a slot, so they carry no scoped-style attribute.
-// The child selector is :global() to reach them; the .hex-cluster prefix keeps
-// it from leaking to the rest of the page.
+// Children arrive through a slot, so they carry no scoped-style attribute. The
+// child selectors are :global() to reach them; the .hex-cluster prefix keeps
+// them from leaking to the rest of the page.
 //
-// The offset is computed from --hex-h rather than hard-coded so it holds at
-// both Hexagon sizes. It uses margin, not transform, because Hexagon applies
-// its own transform on hover and focus.
+// Offsets are margins, not transforms, because Hexagon applies its own
+// transform on hover and focus.
 
 interface Props {
-  /** Must match the Hexagon `size` used inside, so the offset lines up. */
+  /** Must match the Hexagon `size` used inside, so offsets line up. */
   size?: 'md' | 'lg';
 }
 
@@ -49,19 +49,14 @@ const { size = 'md' } = Astro.props;
       --hex-w: 20rem; /* w-80 */
     }
 
-    /* Flat-top hexagons tessellate at 3/4 width horizontally. Pulling
-       neighbours in by a quarter-width, less a hairline, puts the diagonal
-       edges against each other without the fills ever overlapping.
-       (gap cannot be negative, so this is a margin.) */
+    /* Neighbours sit 0.75W apart, so pull in by a quarter width. */
     :global(.hex-cluster > * + *) {
-      margin-left: calc(var(--hex-w) / -4 + 0.25rem);
+      margin-left: calc(var(--hex-w) / -4);
     }
 
-    /* Raise the middle hexagon so its lower diagonals sit against the
-       neighbours' upper diagonals, as in the wireframe. Half of height is
-       where those edges meet when spacing is 3/4 width. */
+    /* The middle hexagon drops into the notch: half a height down. */
     :global(.hex-cluster > *:nth-child(even)) {
-      margin-top: calc(var(--hex-h) / -2);
+      margin-top: calc(var(--hex-h) / 2);
     }
   }
 </style>
