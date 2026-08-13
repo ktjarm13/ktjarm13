@@ -9,9 +9,19 @@ interface Props {
   width?: number;
   height?: number;
   href?: string;
+  /** Pass through when this sits on a dark panel, so the placeholder inverts. */
+  onDark?: boolean;
 }
 
-const { src, alt, label, width = 800, height = 600, href } = Astro.props;
+const {
+  src,
+  alt,
+  label,
+  width = 800,
+  height = 600,
+  href,
+  onDark = false,
+} = Astro.props;
 
 /** CMS-managed paths are root-relative from public/, so route through base. */
 const resolved = src ? withBase(src) : null;
@@ -39,7 +49,7 @@ const Wrapper = href ? 'a' : 'div';
         class="h-auto w-full rounded-xl border-2 border-charcoal/10"
       />
     ) : (
-      <Placeholder label={label} width={width} height={height} />
+      <Placeholder label={label} width={width} height={height} onDark={onDark} />
     )
   }
 </Wrapper>

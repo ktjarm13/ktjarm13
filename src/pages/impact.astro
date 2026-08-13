@@ -8,16 +8,18 @@ import raw from '../data/impact.json';
 
 const data = parsePage(impactSchema, raw, 'impact');
 
-/** Deterministic rotation so the honeycomb reads as a designed cluster and
- *  stays stable between builds. */
-const fills = ['green', 'charcoal', 'orange', 'yellow'] as const;
-type Fill = (typeof fills)[number];
-const fillAt = (index: number): Fill => fills[index % fills.length]!;
+/**
+ * Per Katie's notes: the three central hexagons are 20%-saturated green, and
+ * the four outer ones alternate 20%-saturated orange and yellow. All three
+ * fills are light, so Hexagon gives them charcoal text.
+ */
+const outerFills = ['orange-soft', 'yellow-soft'] as const;
+const outerFillAt = (index: number) => outerFills[index % outerFills.length]!;
 ---
 
 <BaseLayout title={data.title}>
   <div class="mx-auto max-w-5xl px-6 py-12">
-    <h1 class="text-3xl font-extrabold text-charcoal sm:text-4xl">
+    <h1 class="font-display text-4xl text-charcoal sm:text-5xl">
       {data.title}
     </h1>
 
@@ -36,12 +38,13 @@ const fillAt = (index: number): Fill => fills[index % fills.length]!;
       <h2 class="text-2xl font-extrabold text-charcoal sm:text-3xl">
         Collective impact
       </h2>
+
       <div class="mt-10">
         <HexGrid>
           <Fragment slot="rowOne">
             {
               data.rowOne.map((hex, index) => (
-                <Hexagon fill={fillAt(index)}>
+                <Hexagon fill={outerFillAt(index)}>
                   <span class="block text-xl font-extrabold sm:text-2xl">
                     {hex.value}
                   </span>
@@ -55,12 +58,17 @@ const fillAt = (index: number): Fill => fills[index % fills.length]!;
 
           <Fragment slot="rowTwo">
             {
-              data.rowTwo.map((hex, index) => (
-                <Hexagon fill={fillAt(index + 2)}>
-                  <span class="block text-[0.65rem] font-semibold uppercase tracking-wide sm:text-xs">
+              data.rowTwo.map((hex) => (
+                <Hexagon
+                  fill="green-soft"
+                  photo={hex.photo}
+                  photoAlt={`${hex.name}, ${hex.role}`}
+                  photoLabel="Photo"
+                >
+                  <span class="block text-[0.6rem] font-semibold uppercase tracking-wide">
                     {hex.role}
                   </span>
-                  <span class="mt-1 block text-base font-extrabold sm:text-lg">
+                  <span class="mt-0.5 block text-xs font-extrabold sm:text-sm">
                     {hex.name}
                   </span>
                 </Hexagon>
@@ -71,7 +79,7 @@ const fillAt = (index: number): Fill => fills[index % fills.length]!;
           <Fragment slot="rowThree">
             {
               data.rowThree.map((hex, index) => (
-                <Hexagon fill={fillAt(index + 5)}>
+                <Hexagon fill={outerFillAt(index + 1)}>
                   <span class="block text-xl font-extrabold sm:text-2xl">
                     {hex.value}
                   </span>

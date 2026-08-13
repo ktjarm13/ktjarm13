@@ -29,9 +29,13 @@ content:
         label: Third hexagon wording
         type: string
         description: The hexagon that links to your Feeding Liverpool concepts page.
+      - name: portrait
+        label: Your photo
+        type: image
+        description: Shown in the top half of the middle hexagon. Leave empty to show a placeholder.
 
   - name: campaigns-history
-    label: Campaigns History page
+    label: Recent Successful Campaigns page
     type: file
     path: src/data/campaigns-history.json
     format: json
@@ -149,7 +153,7 @@ content:
             type: image
 
   - name: impact
-    label: Community Food Spaces Impact page
+    label: Local Food Space page
     type: file
     path: src/data/impact.json
     format: json
@@ -194,7 +198,7 @@ content:
           - name: photo
             label: Photo
             type: image
-            description: Stored for later use. Not currently shown on the page.
+            description: Shown in the top half of the hexagon. Leave empty to show a placeholder.
       - name: rowThree
         label: Bottom row figures
         type: object

@@ -2,6 +2,7 @@
 @plugin '@tailwindcss/typography';
 
 @import '@fontsource-variable/manrope/index.css';
+@import '@fontsource/permanent-marker/index.css';
 
 @theme {
   --color-green: #049013;
@@ -10,7 +11,19 @@
   --color-yellow: #fea000;
   --color-cream: #faf8f5;
 
+  /* Nav bar. Very light, so anything on it must be charcoal. */
+  --color-mint: #e7f7f3;
+
+  /* 20%-saturated fills for the Local Food Space honeycomb. Same hues as the
+     brand colours, desaturated toward cream, so they read as a muted family.
+     All are light: text on them MUST be charcoal, never white. */
+  --color-green-soft: #d4e8d6;
+  --color-orange-soft: #fce0d2;
+  --color-yellow-soft: #feefd2;
+
   --font-sans: 'Manrope Variable', ui-sans-serif, system-ui, sans-serif;
+  /* Page titles only. Decorative, so never used for body or small text. */
+  --font-display: 'Permanent Marker', 'Manrope Variable', cursive;
 }
 
 /* Body copy is charcoal on cream (~13:1). Green (~4.3:1) and orange (~2.9:1)

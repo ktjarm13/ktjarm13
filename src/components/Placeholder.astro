@@ -3,18 +3,25 @@ interface Props {
   label: string;
   width?: number;
   height?: number;
+  /** Use light borders and text, for placeholders sitting on a dark panel. */
+  onDark?: boolean;
 }
 
-const { label, width = 800, height = 600 } = Astro.props;
+const { label, width = 800, height = 600, onDark = false } = Astro.props;
 ---
 
 <div
-  class="grid place-items-center rounded-xl border-2 border-dashed border-charcoal/30 bg-charcoal/5 p-6 text-center"
+  class:list={[
+    'grid place-items-center rounded-xl border-2 border-dashed p-6 text-center',
+    onDark
+      ? 'border-white/50 bg-white/10 text-white'
+      : 'border-charcoal/30 bg-charcoal/5 text-charcoal',
+  ]}
   style={`aspect-ratio: ${width} / ${height};`}
 >
   <div>
-    <p class="text-sm font-bold text-charcoal">{label}</p>
-    <p class="mt-1 text-xs text-charcoal/70">
+    <p class="text-sm font-bold">{label}</p>
+    <p class:list={['mt-1 text-xs', onDark ? 'text-white/80' : 'text-charcoal/70']}>
       Image placeholder &middot; {width} &times; {height}
     </p>
   </div>

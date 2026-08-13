@@ -1,31 +1,67 @@
 ---
+import Placeholder from './Placeholder.astro';
+import { withBase } from '../lib/paths';
+
 interface Props {
-  fill?: 'green' | 'charcoal' | 'orange' | 'yellow';
+  fill?:
+    | 'green'
+    | 'charcoal'
+    | 'orange'
+    | 'yellow'
+    | 'green-soft'
+    | 'orange-soft'
+    | 'yellow-soft';
   href?: string;
   label?: string;
   size?: 'md' | 'lg';
+  /**
+   * Split the hexagon into a photo half and a text half, per Katie's notes for
+   * the Home middle hexagon and the Local Food Space middle row. The photo
+   * occupies the top half and the text the bottom.
+   */
+  photo?: string | null;
+  /** Alt text for the photo half. Required whenever `photo` is used. */
+  photoAlt?: string;
+  /** Shown in the photo half when `photo` is empty. */
+  photoLabel?: string;
 }
 
-const { fill = 'green', href, label, size = 'md' } = Astro.props;
+const {
+  fill = 'green',
+  href,
+  label,
+  size = 'md',
+  photo,
+  photoAlt = '',
+  photoLabel = 'Photo',
+} = Astro.props;
 
+/** The soft fills are very light, so they take charcoal text, not white. */
 const fillClass = {
   green: 'bg-green text-white',
   charcoal: 'bg-charcoal text-white',
   orange: 'bg-orange text-white',
   // Yellow is light; white text on it fails contrast, so use charcoal.
   yellow: 'bg-yellow text-charcoal',
+  'green-soft': 'bg-green-soft text-charcoal',
+  'orange-soft': 'bg-orange-soft text-charcoal',
+  'yellow-soft': 'bg-yellow-soft text-charcoal',
 }[fill];
 
 const sizeClass = size === 'lg' ? 'w-72 sm:w-80' : 'w-56 sm:w-64';
 const Tag = href ? 'a' : 'div';
 /** Slot content wins when present; `label` is the simple single-string case. */
 const hasSlot = Astro.slots.has('default');
+/** `photo` present at all — including explicitly null — means split layout. */
+const isSplit = photo !== undefined;
+const resolvedPhoto = photo ? withBase(photo) : null;
 ---
 
 <Tag
   class:list={[
-    'hexagon group relative grid place-items-center text-center no-underline',
-    'transition-transform duration-200',
+    'hexagon group relative no-underline transition-transform duration-200',
+    isSplit ? 'flex flex-col' : 'grid place-items-center',
+    'text-center',
     sizeClass,
     fillClass,
     href && 'hover:scale-[1.03] focus-visible:scale-[1.03]',
@@ -34,9 +70,51 @@ const hasSlot = Astro.slots.has('default');
   ]}
   {...href ? { href } : {}}
 >
-  <span class="hexagon-body text-sm font-extrabold leading-tight sm:text-base">
-    {hasSlot ? <slot /> : label}
-  </span>
+  {
+    isSplit ? (
+      <>
+        {/*
+          Photo half. The parent's clip-path trims this, but a background on a
+          full-width child still paints across the clipped corners and reads as
+          a continuous band between neighbours. Insetting the tint horizontally
+          keeps it inside the hexagon's own outline.
+        */}
+        <div class="h-1/2 w-full">
+          {resolvedPhoto ? (
+            <img
+              src={resolvedPhoto}
+              alt={photoAlt}
+              loading="lazy"
+              decoding="async"
+              class="h-full w-full object-cover"
+            />
+          ) : (
+            <div class="mx-auto grid h-full w-2/3 place-items-center">
+              <span class="text-[0.55rem] font-semibold uppercase tracking-wide opacity-60">
+                {photoLabel}
+              </span>
+            </div>
+          )}
+        </div>
+
+        {/* Text half. A short centred rule marks the split so it reads
+            deliberately rather than as an image that failed to load. */}
+        <div class="relative grid h-1/2 w-full place-items-center">
+          <span
+            class="absolute inset-x-0 top-0 mx-auto h-px w-2/3 bg-charcoal/20"
+            aria-hidden="true"
+          ></span>
+          <span class="hexagon-body text-xs font-extrabold leading-tight sm:text-sm">
+            {hasSlot ? <slot /> : label}
+          </span>
+        </div>
+      </>
+    ) : (
+      <span class="hexagon-body text-sm font-extrabold leading-tight sm:text-base">
+        {hasSlot ? <slot /> : label}
+      </span>
+    )
+  }
 </Tag>
 
 <style>
@@ -48,10 +126,10 @@ const hasSlot = Astro.slots.has('default');
   }
 
   /* A flat-top hexagon narrows toward its left and right points, so the safe
-     text width depends on vertical position. Capping the column at 70% of
-     width keeps text clear of the diagonals at the heights text occupies.
-     Set on the element itself rather than via a Tailwind utility so it is not
-     overridden by the display utility. */
+     text width depends on vertical position. Capping the column keeps text
+     clear of the diagonals at the heights text occupies. Set on the element
+     itself rather than via a Tailwind utility so it is not overridden by the
+     display utility. */
   .hexagon-body {
     display: block;
     max-width: 66%;

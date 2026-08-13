@@ -28,6 +28,8 @@ export const homeSchema = z.object({
   title: z.string().min(1),
   campaignsHexLabel: z.string().min(1),
   conceptsHexLabel: z.string().min(1),
+  /** Photo half of the middle hexagon. */
+  portrait: imagePath,
 });
 
 export const campaignsHistorySchema = z.object({
@@ -59,7 +61,9 @@ export const impactSchema = z.object({
   title: z.string().min(1),
   /** Screenshot of the Christ Church Toxteth Park Pantry page. */
   pantryScreenshot: imagePath,
-  /** Honeycomb rows, per the notes: 2 stats, 3 spotlights, 2 stats. */
+  /** Honeycomb rows, per Katie's revised order: 2 stats, 3 spotlights, 2 stats.
+   *  Top: people served, food saved from landfill.
+   *  Bottom: food produced locally, number of volunteers. */
   rowOne: z.tuple([statHexSchema, statHexSchema]),
   rowTwo: z.tuple([spotlightHexSchema, spotlightHexSchema, spotlightHexSchema]),
   rowThree: z.tuple([statHexSchema, statHexSchema]),

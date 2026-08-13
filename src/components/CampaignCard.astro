@@ -1,0 +1,58 @@
+---
+import ImageOrPlaceholder from './ImageOrPlaceholder.astro';
+import { withBaseLinks } from '../lib/richtext';
+
+interface Props {
+  heading: string;
+  body: string;
+  image: string | null;
+}
+
+const { heading, body, image } = Astro.props;
+
+const html = withBaseLinks(body, import.meta.env.BASE_URL);
+---
+
+<!--
+  A campaign card, per Katie's Recent Successful Campaigns reference: a green
+  rounded panel stacking its content vertically — heading, image, then the body
+  text. Three of these sit side by side, so each card's content runs top to
+  bottom rather than the previous left/right split.
+
+  The panel is solid green, so all text inside is white. White on green is
+  ~4.9:1, which passes AA.
+-->
+<article class="flex flex-col rounded-3xl bg-green p-6 text-white">
+  <h2 class="text-center text-lg font-extrabold">
+    {heading}
+  </h2>
+
+  <div class="mt-4">
+    <ImageOrPlaceholder
+      src={image}
+      alt={heading}
+      label={`${heading} image`}
+      width={600}
+      height={450}
+      onDark
+    />
+  </div>
+
+  <!-- card-prose forces white text: global.css pins .prose to charcoal, which
+       Tailwind's prose-invert does not override. -->
+  <div class="card-prose prose prose-sm mt-4 max-w-none" set:html={html} />
+</article>
+
+<style>
+  /* :global() because set:html content is not scoped, so the descendant
+     selectors Tailwind Typography generates would not otherwise match. */
+  :global(.card-prose) {
+    --tw-prose-body: #ffffff;
+    --tw-prose-headings: #ffffff;
+    --tw-prose-bold: #ffffff;
+    --tw-prose-counters: #ffffff;
+    --tw-prose-bullets: #ffffff;
+    --tw-prose-links: #ffffff;
+    color: #ffffff;
+  }
+</style>
