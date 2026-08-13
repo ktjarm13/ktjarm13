@@ -1,0 +1,45 @@
+---
+import Placeholder from './Placeholder.astro';
+import { withBase } from '../lib/paths';
+
+interface Props {
+  src: string | null;
+  alt: string;
+  label: string;
+  width?: number;
+  height?: number;
+  href?: string;
+}
+
+const { src, alt, label, width = 800, height = 600, href } = Astro.props;
+
+/** CMS-managed paths are root-relative from public/, so route through base. */
+const resolved = src ? withBase(src) : null;
+
+const Wrapper = href ? 'a' : 'div';
+---
+
+<Wrapper
+  class:list={[
+    'block',
+    href &&
+      'rounded-xl transition-transform duration-200 hover:scale-[1.01] focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-green',
+  ]}
+  {...href ? { href } : {}}
+>
+  {
+    resolved ? (
+      <img
+        src={resolved}
+        alt={alt}
+        width={width}
+        height={height}
+        loading="lazy"
+        decoding="async"
+        class="h-auto w-full rounded-xl border-2 border-charcoal/10"
+      />
+    ) : (
+      <Placeholder label={label} width={width} height={height} />
+    )
+  }
+</Wrapper>
