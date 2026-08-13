@@ -1,5 +1,4 @@
 ---
-import Placeholder from './Placeholder.astro';
 import { withBase } from '../lib/paths';
 
 interface Props {
@@ -57,64 +56,76 @@ const isSplit = photo !== undefined;
 const resolvedPhoto = photo ? withBase(photo) : null;
 ---
 
+{/*
+  A clip-path crops any CSS border away, so the outline is drawn as two stacked
+  hexagons: this outer element painted charcoal, and an inner one inset by the
+  border width carrying the fill. The visible charcoal ring is what stops
+  adjacent same-coloured hexagons from blending into one another.
+*/}
 <Tag
   class:list={[
-    'hexagon group relative no-underline transition-transform duration-200',
-    isSplit ? 'flex flex-col' : 'grid place-items-center',
-    'text-center',
+    'hexagon hexagon-outline group relative block no-underline',
+    'transition-transform duration-200',
     sizeClass,
-    fillClass,
     href && 'hover:scale-[1.03] focus-visible:scale-[1.03]',
     href &&
       'focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-charcoal',
   ]}
   {...href ? { href } : {}}
 >
-  {
-    isSplit ? (
-      <>
-        {/*
-          Photo half. The parent's clip-path trims this, but a background on a
-          full-width child still paints across the clipped corners and reads as
-          a continuous band between neighbours. Insetting the tint horizontally
-          keeps it inside the hexagon's own outline.
-        */}
-        <div class="h-1/2 w-full">
-          {resolvedPhoto ? (
-            <img
-              src={resolvedPhoto}
-              alt={photoAlt}
-              loading="lazy"
-              decoding="async"
-              class="h-full w-full object-cover"
-            />
-          ) : (
-            <div class="mx-auto grid h-full w-2/3 place-items-center">
-              <span class="text-[0.55rem] font-semibold uppercase tracking-wide opacity-60">
-                {photoLabel}
+  <span
+    class:list={[
+      'hexagon hexagon-inner',
+      isSplit ? 'flex flex-col' : 'grid place-items-center',
+      'text-center',
+      fillClass,
+    ]}
+  >
+    {
+      isSplit ? (
+        <>
+          {/*
+            Photo half. The parent's clip-path trims this, but a background on a
+            full-width child still paints across the clipped corners and reads
+            as a continuous band between neighbours. Insetting the tint
+            horizontally keeps it inside the hexagon's own outline.
+          */}
+          <span class="block h-1/2 w-full">
+            {resolvedPhoto ? (
+              <img
+                src={resolvedPhoto}
+                alt={photoAlt}
+                loading="lazy"
+                decoding="async"
+                class="h-full w-full object-cover"
+              />
+            ) : (
+              <span class="mx-auto grid h-full w-2/3 place-items-center">
+                <span class="text-[0.55rem] font-semibold uppercase tracking-wide opacity-60">
+                  {photoLabel}
+                </span>
               </span>
-            </div>
-          )}
-        </div>
-
-        {/* Text half. A short centred rule marks the split so it reads
-            deliberately rather than as an image that failed to load. */}
-        <div class="relative grid h-1/2 w-full place-items-center">
-          <span
-            class="absolute inset-x-0 top-0 mx-auto h-px w-2/3 bg-charcoal/20"
-            aria-hidden="true"
-          ></span>
-          <span class="hexagon-body text-xs font-extrabold leading-tight sm:text-sm">
-            {hasSlot ? <slot /> : label}
+            )}
           </span>
-        </div>
-      </>
-    ) : (
-      <span class="hexagon-body text-sm font-extrabold leading-tight sm:text-base">
-        {hasSlot ? <slot /> : label}
-      </span>
-    )
-  }
+
+          {/* Text half, with a short centred rule marking the split. */}
+          <span class="relative grid h-1/2 w-full place-items-center">
+            <span
+              class="absolute inset-x-0 top-0 mx-auto h-px w-2/3 bg-charcoal/20"
+              aria-hidden="true"
+            />
+            <span class="hexagon-body text-xs font-extrabold leading-tight sm:text-sm">
+              {hasSlot ? <slot /> : label}
+            </span>
+          </span>
+        </>
+      ) : (
+        <span class="hexagon-body text-sm font-extrabold leading-tight sm:text-base">
+          {hasSlot ? <slot /> : label}
+        </span>
+      )
+    }
+  </span>
 </Tag>
 
 <style>
@@ -123,6 +134,20 @@ const resolvedPhoto = photo ? withBase(photo) : null;
        flat edges top and bottom. Height = width * cos(30deg). */
     aspect-ratio: 1 / 0.866;
     clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+  }
+
+  /* Border thickness. The inner hexagon is inset by this on all sides, so the
+     outer charcoal shape shows through as an even ring. */
+  .hexagon-outline {
+    --hex-border: 3px;
+    background-color: var(--color-charcoal);
+  }
+
+  .hexagon-inner {
+    position: absolute;
+    inset: var(--hex-border);
+    /* aspect-ratio would fight the inset, so the shape comes from inset alone. */
+    aspect-ratio: auto;
   }
 
   /* A flat-top hexagon narrows toward its left and right points, so the safe

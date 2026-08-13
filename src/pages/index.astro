@@ -14,15 +14,16 @@ const data = parsePage(homeSchema, raw, 'home');
     <div class="w-full">
       <h1 class="sr-only">{data.title}</h1>
       <!--
-        Two colours only, per Katie's note, alternating across the cluster.
-        The middle hexagon is split: photo above, text below.
+        Pastel fills matching the Local Food Space honeycomb, with the charcoal
+        border keeping neighbours distinct. The centre hexagon sits on top and
+        is split: photo above, text below.
       -->
       <HexRow size="lg">
-        <Hexagon fill="yellow" size="lg" href={withBase('/campaigns-history')}>
+        <Hexagon fill="orange-soft" size="lg" href={withBase('/campaigns-history')}>
           {data.campaignsHexLabel}
         </Hexagon>
         <Hexagon
-          fill="green"
+          fill="green-soft"
           size="lg"
           photo={data.portrait}
           photoAlt="Katie Jarman"
@@ -30,7 +31,7 @@ const data = parsePage(homeSchema, raw, 'home');
         >
           {data.title}
         </Hexagon>
-        <Hexagon fill="yellow" size="lg" href={withBase('/concepts')}>
+        <Hexagon fill="yellow-soft" size="lg" href={withBase('/concepts')}>
           {data.conceptsHexLabel}
         </Hexagon>
       </HexRow>

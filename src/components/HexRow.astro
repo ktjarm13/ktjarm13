@@ -54,8 +54,10 @@ const { size = 'md' } = Astro.props;
       margin-left: calc(var(--hex-w) / -4);
     }
 
-    /* The middle hexagon drops into the notch: half a height down. */
-    :global(.hex-cluster > *:nth-child(even)) {
+    /* The centre hexagon sits on top, so the OUTER pair drops into the notches
+       either side of it by half a height. Offsetting the outer ones rather than
+       raising the centre keeps the cluster's top edge flush with the container. */
+    :global(.hex-cluster > *:nth-child(odd)) {
       margin-top: calc(var(--hex-h) / 2);
     }
   }
