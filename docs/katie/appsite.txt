@@ -1,0 +1,26 @@
+All page titles should be in the Google 'Permanent Marker' Font
+
+The nav bar on all pages to be #E7F7F3 and thicker.
+
+Home page icon is saved name jpg,
+
+
+Home Page
+Hexagons should be touching not overlapping
+
+Hexagons two colours. Middle hex half space for photo half for text.
+
+Campaigns History and Reach
+Rename this Recent Successful Campaigns. 
+
+Three options should be presented vertically rather than horizontally.
+
+
+Community Food Spaces Impact
+Rename to Local Food Space
+
+Three central hexagons green at 20% saturated
+Outer hexagons to be orange and yellow but 20% saturated
+Top row - x amount of people served, x weight of food saved from landfill
+Middle row - hexagons vertically spilt to be half text half photo
+bottom row - x weight of food produced locally, x number of volunteers

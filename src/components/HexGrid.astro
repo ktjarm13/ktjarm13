@@ -1,26 +1,26 @@
 ---
 // Impact page honeycomb: rows of 2, 3, 2.
 //
-// True honeycomb geometry: hexagons within a row sit edge to edge and do NOT
-// overlap — only successive rows interlock, pulled up by a quarter of hexagon
-// height so each row nests into the notches of the one above. Overlapping
-// within a row would clip neighbours' text under adjacent fills.
+// Flat-top hexagons, so rows tessellate differently from pointy-top ones:
+// each row sits directly below the last with a small gap, and the wider
+// middle row is centred by flex, giving the staggered honeycomb look.
 //
-// The 2/3/2 shape centres itself: flex centring handles the half-hexagon
-// offset between a 2-wide and 3-wide row automatically.
+// Per Katie's wireframe hexagons TOUCH but never overlap, so there are no
+// negative margins here — gaps are positive and small.
 //
-// Offsets are computed from --hex-w. A percentage margin would resolve against
-// the container rather than the hexagon and collapse the rows.
+// Row children arrive through slots and carry no scoped-style attribute, so
+// child selectors would need :global(). None are needed now that spacing is
+// handled by gap on the row itself.
 ---
 
 <div class="hex-honeycomb">
   <div class="hex-row">
     <slot name="rowOne" />
   </div>
-  <div class="hex-row hex-row-nested">
+  <div class="hex-row">
     <slot name="rowTwo" />
   </div>
-  <div class="hex-row hex-row-nested">
+  <div class="hex-row">
     <slot name="rowThree" />
   </div>
 </div>
@@ -42,9 +42,9 @@
 
   @media (min-width: 40rem) {
     .hex-honeycomb {
-      /* Hexagon width above sm (w-64), and its pointy-top height. */
+      /* Hexagon width above sm (w-64), and its flat-top height. */
       --hex-w: 16rem;
-      --hex-h: calc(var(--hex-w) / 0.866);
+      --hex-h: calc(var(--hex-w) * 0.866);
 
       gap: 0;
     }
@@ -55,10 +55,39 @@
       gap: 0;
     }
 
-    /* Rows overlap vertically by a quarter of hexagon height, where a
-       pointy-top hexagon's upper slope meets its straight side. */
-    .hex-row-nested {
-      margin-top: calc(var(--hex-h) / -4);
+    /* Flat-top hexagons tessellate at 3/4 width horizontally. Pulling
+       neighbours in by a quarter-width, less a hairline, puts the diagonal
+       edges against each other without the fills overlapping. */
+    :global(.hex-row > * + *) {
+      margin-left: calc(var(--hex-w) / -4 + 0.25rem);
     }
+
+    /* Flat-top rows stack at full height — unlike pointy-top ones they do not
+       interlock vertically. The horizontal half-width offset between a 2-wide
+       and 3-wide row, which flex centring produces for free, is what gives the
+       honeycomb its staggered look. A hairline gap keeps fills apart. */
+    .hex-row + .hex-row {
+      margin-top: 0.25rem;
+    }
+  }
+
+  /* The negative horizontal margin makes later hexagons paint over earlier
+     ones. Their clipped corners are transparent so no fill is hidden, but a
+     neighbour's corner can still land on top of a label. Reversing the paint
+     order per row keeps each hexagon's own text above its neighbours. */
+  :global(.hex-row > *) {
+    position: relative;
+  }
+
+  :global(.hex-row > *:nth-child(1)) {
+    z-index: 3;
+  }
+
+  :global(.hex-row > *:nth-child(2)) {
+    z-index: 2;
+  }
+
+  :global(.hex-row > *:nth-child(3)) {
+    z-index: 1;
   }
 </style>

@@ -41,19 +41,20 @@ const hasSlot = Astro.slots.has('default');
 
 <style>
   .hexagon {
-    /* Pointy-top hexagon. 0.8660 = cos(30deg), giving true regular geometry. */
-    aspect-ratio: 0.866 / 1;
-    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    /* Flat-top hexagon, matching Katie's wireframes: points left and right,
+       flat edges top and bottom. Height = width * cos(30deg). */
+    aspect-ratio: 1 / 0.866;
+    clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
   }
 
-  /* A hexagon's usable area narrows toward its top and bottom points, so
-     rectangular padding is not enough — text would cross the clipped edge.
-     Capping the text column at 62% of hexagon width keeps every line inside
-     the straight sides. Set on the element itself rather than via a Tailwind
-     utility so it is not overridden by the display utility's specificity. */
+  /* A flat-top hexagon narrows toward its left and right points, so the safe
+     text width depends on vertical position. Capping the column at 70% of
+     width keeps text clear of the diagonals at the heights text occupies.
+     Set on the element itself rather than via a Tailwind utility so it is not
+     overridden by the display utility. */
   .hexagon-body {
     display: block;
-    max-width: 62%;
+    max-width: 66%;
     overflow-wrap: break-word;
     hyphens: auto;
   }
