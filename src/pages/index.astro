@@ -2,37 +2,26 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hexagon from '../components/Hexagon.astro';
 import HexRow from '../components/HexRow.astro';
-import HexGrid from '../components/HexGrid.astro';
+import { homeSchema, parsePage } from '../schemas/pages';
+import { withBase } from '../lib/paths';
+import raw from '../data/home.json';
+
+const data = parsePage(homeSchema, raw, 'home');
 ---
 
-<BaseLayout title="Hexagon geometry check" showChrome={false}>
-  <div class="mx-auto max-w-5xl px-6 py-16">
-    <h1 class="text-3xl font-extrabold">HexRow</h1>
-    <div class="mt-8">
-      <HexRow>
-        <Hexagon fill="green" label="One" />
-        <Hexagon fill="charcoal" label="Two" href="#" />
-        <Hexagon fill="orange" label="Three" href="#" />
+<BaseLayout title={data.title} showChrome={false}>
+  <div class="mx-auto grid min-h-screen max-w-5xl place-items-center px-6 py-16">
+    <div class="w-full">
+      <h1 class="sr-only">{data.title}</h1>
+      <HexRow size="lg">
+        <Hexagon fill="charcoal" size="lg">{data.title}</Hexagon>
+        <Hexagon fill="green" size="lg" href={withBase('/campaigns-history')}>
+          {data.campaignsHexLabel}
+        </Hexagon>
+        <Hexagon fill="orange" size="lg" href={withBase('/concepts')}>
+          {data.conceptsHexLabel}
+        </Hexagon>
       </HexRow>
-    </div>
-
-    <h2 class="mt-20 text-3xl font-extrabold">HexGrid (2 / 3 / 2)</h2>
-    <div class="mt-8">
-      <HexGrid>
-        <Fragment slot="rowOne">
-          <Hexagon fill="green" label="R1 A" />
-          <Hexagon fill="charcoal" label="R1 B" />
-        </Fragment>
-        <Fragment slot="rowTwo">
-          <Hexagon fill="orange" label="R2 A" />
-          <Hexagon fill="yellow" label="R2 B" />
-          <Hexagon fill="green" label="R2 C" />
-        </Fragment>
-        <Fragment slot="rowThree">
-          <Hexagon fill="charcoal" label="R3 A" />
-          <Hexagon fill="orange" label="R3 B" />
-        </Fragment>
-      </HexGrid>
     </div>
   </div>
 </BaseLayout>

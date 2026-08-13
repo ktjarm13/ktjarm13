@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import ImageOrPlaceholder from '../components/ImageOrPlaceholder.astro';
+import { campaignsHistorySchema, parsePage } from '../schemas/pages';
+import raw from '../data/campaigns-history.json';
+
+const data = parsePage(campaignsHistorySchema, raw, 'campaigns-history');
+---
+
+<BaseLayout title={data.title}>
+  <div class="mx-auto max-w-5xl px-6 py-12">
+    <h1 class="text-3xl font-extrabold text-charcoal sm:text-4xl">
+      {data.title}
+    </h1>
+
+    <div class="mt-8 divide-y-2 divide-charcoal/10">
+      {
+        data.sections.map((section, index) => (
+          <Section
+            heading={section.heading}
+            body={section.body}
+            reverse={index % 2 === 1}
+          >
+            <ImageOrPlaceholder
+              slot="media"
+              src={section.image}
+              alt={section.heading}
+              label={`${section.heading} image`}
+            />
+          </Section>
+        ))
+      }
+    </div>
+  </div>
+</BaseLayout>

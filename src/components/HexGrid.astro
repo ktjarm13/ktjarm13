@@ -5,10 +5,9 @@
 // the child selectors are :global() to reach them, prefixed with .hex-row so
 // they do not leak to the rest of the page.
 //
-// Offsets are in rem, not percentages: a percentage margin resolves against
-// the container's width, not the hexagon's, which collapses the row. Hexagons
-// are w-64 (16rem) above sm, so height is 16 / 0.866 = 18.48rem. Quarter-width
-// is 4rem; rows overlap by a quarter of height, 4.62rem.
+// Offsets are computed from --hex-w, matching HexRow's approach. A percentage
+// margin would resolve against the container rather than the hexagon and
+// collapse the rows.
 ---
 
 <div class="hex-honeycomb">
@@ -40,6 +39,10 @@
 
   @media (min-width: 40rem) {
     .hex-honeycomb {
+      /* Hexagon width above sm (w-64), and its pointy-top height. */
+      --hex-w: 16rem;
+      --hex-h: calc(var(--hex-w) / 0.866);
+
       gap: 0;
     }
 
@@ -50,12 +53,12 @@
     }
 
     :global(.hex-row > * + *) {
-      margin-left: -4rem;
+      margin-left: calc(var(--hex-w) / -4);
     }
 
     /* Pull each row up by a quarter of hexagon height so rows interlock. */
     .hex-row-nested {
-      margin-top: -4.62rem;
+      margin-top: calc(var(--hex-h) / -4);
     }
   }
 </style>
