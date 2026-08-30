@@ -3,15 +3,18 @@
   "sections": [
     {
       "heading": "My Councillor Instagram July Stats",
-      "body": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p><p><strong>22K views</strong> · <strong>20 followers per post</strong></p>"
+      "body": "<p><strong>22K views</strong> </p><p><strong>20 followers per post</strong></p>",
+      "image": "/media/councillor-instgaram.png"
     },
     {
       "heading": "Local By-Elections",
-      "body": "<p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p><p><strong>2 wins in 2 years</strong> · <strong>24+ leaflets designed</strong> · <strong>Intense 6 week timeline</strong> · <strong>200+ volunteers engaged</strong></p>"
+      "body": "<p><strong>2 wins in 2 years</strong> </p><p><strong>24+ leaflets designed</strong> </p><p><strong>Intense 6 week timeline</strong> </p><p><strong>200+ volunteers engaged</strong></p>",
+      "image": "/media/screenshot-2026-08-30-163414.png"
     },
     {
       "heading": "Big Green Spring Clean",
-      "body": "<p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p><p><strong>33K+ views</strong> · <strong>13K+ accounts reached</strong></p>"
+      "body": "<p><strong>33K+ views</strong> </p><p><strong>13K+ accounts reached</strong></p>",
+      "image": "/media/screenshot-2026-08-30-163512.png"
     }
   ]
 }
