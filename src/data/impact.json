@@ -1,40 +1,40 @@
 {
   "title": "Local Food Space",
-  "pantryScreenshot": null,
+  "pantryScreenshot": "/media/screenshot-2026-08-30-165709.png",
   "rowOne": [
     {
-      "value": "000",
+      "value": "X",
       "label": "Amount of people served"
     },
     {
-      "value": "— tonnes",
+      "value": "X tonnes",
       "label": "Weight of food saved from landfill"
     }
   ],
   "rowTwo": [
     {
       "role": "Organiser Spotlight",
-      "name": "Name to follow",
-      "photo": null
+      "name": "Edmond",
+      "photo": "/media/pxl20260719175434238.jpg"
     },
     {
       "role": "Shopper Highlight",
-      "name": "Name to follow",
-      "photo": null
+      "name": "Bertie",
+      "photo": "/media/bert.jpg"
     },
     {
       "role": "Volunteer Highlight",
-      "name": "Name to follow",
-      "photo": null
+      "name": "Dax",
+      "photo": "/media/pxl20210819125446556.jpg"
     }
   ],
   "rowThree": [
     {
-      "value": "— tonnes",
+      "value": "X tonnes",
       "label": "Weight of food produced locally"
     },
     {
-      "value": "000",
+      "value": "X",
       "label": "Number of volunteers"
     }
   ]
